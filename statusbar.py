@@ -1,7 +1,6 @@
 from __future__ import division
 import pygame
 
-import statusbox
 import constants
 
 class Status_bar(pygame.sprite.Sprite):
@@ -24,7 +23,7 @@ class Status_bar(pygame.sprite.Sprite):
 
     def _draw_title(self):
         title_font = pygame.font.Font(None, 50)
-        title_rend = title_font.render("FormulaAI", 1, (10, 20, 30))
+        title_rend = title_font.render("FormulaPF", 1, (10, 20, 30))
         title_pos = title_rend.get_rect()
         title_pos.x += 10
         self.image.blit(title_rend, title_pos)

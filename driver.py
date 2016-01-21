@@ -2,7 +2,6 @@ import numpy as np
 import pygame
 
 import constants
-import ann
 
 
 class Driver(object):
@@ -49,7 +48,7 @@ class Driver(object):
                       ).astype(int)
 
         # limit coordinates within track area (only for checking if off track)
-        x_matrix0 = np.where((self.view_x < 0) | 
+        x_matrix0 = np.where((self.view_x < 0) |
                              (self.view_x >= constants.WIDTH_TRACK),
                              0, self.view_x)
         y_matrix0 = np.where((self.view_y < 0) |
@@ -110,7 +109,7 @@ class Player(Driver):
 
 class AI_TIF(Driver):
     """
-    This class implements a simple AI driver that tries to keep most of 
+    This class implements a simple AI driver that tries to keep most of
     the track in front of its view field.
     """
     def __init__(self, *args, **kwargs):

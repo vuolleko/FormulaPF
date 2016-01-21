@@ -4,8 +4,8 @@ from car import Car
 import driver
 from track import Track
 from statusbar import Status_bar
-from plot_error import Error_plot
 import constants
+import particle_filter
 
 # init stuff
 pygame.init()
@@ -16,31 +16,24 @@ learn_from_player = False
 
 screen = pygame.display.set_mode((constants.WIDTH_SCREEN,
                                   constants.HEIGHT_SCREEN))
-pygame.display.set_caption("FormulaAI")
+pygame.display.set_caption("FormulaPF")
 
 track = Track()
 start_position, start_direction = track.find_start(4)
 
-player_car = Car("Player", constants.BLUE, start_position[0], start_direction,
-                 driver.Player())
-ai_tif_car = Car("AI_TIF", constants.YELLOW, start_position[3], start_direction,
+ai_tif_car = Car("AI_TIF", constants.RED, start_position[3], start_direction,
                  driver.AI_TIF())
-ann_online_car = Car("ANN_Online", constants.RED, start_position[2],
-                     start_direction, driver.ANN_Online(model_car=ai_tif_car))
-ann_batch_car = Car("ANN_Batch", constants.GREEN, start_position[1],
-                    start_direction, driver.ANN_Batch(model_car=ai_tif_car))
 
 sprite_list = pygame.sprite.Group()
 car_list = pygame.sprite.Group()
-for car in [player_car, ann_online_car, ann_batch_car, ai_tif_car]:
+for car in [ai_tif_car]:
     car_list.add(car)
     sprite_list.add(car)
 
 status_bar = Status_bar(car_list)
 sprite_list.add(status_bar)
 
-if constants.PLOT_ERROR:
-    error_plot = Error_plot([ann_online_car, ann_batch_car])
+particles = particle_filter.PFilter(track, ai_tif_car, 500, 7)
 
 frame_counter = 0
 
@@ -71,6 +64,7 @@ while not done:
 
     # update game status and handle game logic
     car_list.update(track, frame_counter)
+    particles.update(frame_counter)
     status_bar.update(frame_counter)
 
     # update draw buffer
@@ -80,9 +74,8 @@ while not done:
         for car in car_list:
             car.driver.draw_viewfield(screen)
 
-    # update error plot
-    if constants.PLOT_ERROR:
-        error_plot.update(frame_counter)
+    # draw particles
+    particles.draw(screen)
 
     # update screen
     clock.tick(constants.FRAME_RATE)  # fps
