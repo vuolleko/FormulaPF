@@ -6,7 +6,7 @@ import pygame
 import constants
 
 
-class PFilter:
+class PFilter(object):
     """
     Implements a particle filter for positioning a car on track.
     """
@@ -71,20 +71,29 @@ class PFilter:
             indices = np.random.choice(np.arange(self.n_particles),
                                        size=self.n_particles, replace=True,
                                        p=weights)
+            self.xx = self.xx[indices] + np.random.randn(self.n_particles) * self.sd
+            self.yy = self.yy[indices] + np.random.randn(self.n_particles) * self.sd
+            self.sd *= 0.995
+            self.move_particles()
 
-            xx = (self.xx[indices]
-                  + self.car.speed * np.cos(self.car.direction) * constants.PARTICLE_UPDATE_INTERVAL
-                  + np.random.randn(self.n_particles) * self.sd)
-            yy = (self.yy[indices]
-                  - self.car.speed * np.sin(self.car.direction) * constants.PARTICLE_UPDATE_INTERVAL
-                  + np.random.randn(self.n_particles) * self.sd)
+    def move_particles(self, walls=True, deltaTime=constants.PARTICLE_UPDATE_INTERVAL):
+        """
+        Move particles with knowledge of car's velocity vector.
+        """
+
+        xx = (self.xx
+              + self.car.speed * np.cos(self.car.direction) * deltaTime
+              )
+        yy = (self.yy
+              - self.car.speed * np.sin(self.car.direction) * deltaTime
+              )
+        if walls:
             xx = np.where(xx < 0, 0, xx)
             xx = np.where(xx >= constants.WIDTH_TRACK, constants.WIDTH_TRACK-1, xx)
             yy = np.where(yy < 0, 0, yy)
             yy = np.where(yy >= constants.HEIGHT_TRACK, constants.HEIGHT_TRACK-1, yy)
-            self.xx = np.int0(xx)
-            self.yy = np.int0(yy)
-
+        self.xx = np.int0(xx)
+        self.yy = np.int0(yy)
 
     def draw(self, screen):
         """
