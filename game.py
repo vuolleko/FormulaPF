@@ -6,6 +6,7 @@ from track import Track
 from statusbar import Status_bar
 import constants
 import particle_filter
+import bayes
 
 # init stuff
 pygame.init()
@@ -34,6 +35,7 @@ status_bar = Status_bar(car_list)
 sprite_list.add(status_bar)
 
 particles = particle_filter.PFilter(track, ai_tif_car, 500, 7)
+bayes = bayes.Bayes(track, ai_tif_car)
 
 frame_counter = 0
 
@@ -64,7 +66,8 @@ while not done:
 
     # update game status and handle game logic
     car_list.update(track, frame_counter)
-    particles.update(frame_counter)
+    # particles.update(frame_counter)
+    bayes.update(frame_counter)
     status_bar.update(frame_counter)
 
     # update draw buffer
@@ -75,7 +78,8 @@ while not done:
             car.driver.draw_viewfield(screen)
 
     # draw particles
-    particles.draw(screen)
+    # particles.draw(screen)
+    bayes.draw(screen)
 
     # update screen
     clock.tick(constants.FRAME_RATE)  # fps
