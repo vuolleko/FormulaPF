@@ -244,8 +244,8 @@ class ANN_Batch(ANN_Online):
         Train the whole set of samples.
         NOTE: May take a while and pause the game!
         """
-        print "Training {} samples for {} epochs in batches of {}".format(
-               len(self.input_samples), self.epochs, self.mini_batch_size)
+        print("Training {} samples for {} epochs in batches of {}".format(
+               len(self.input_samples), self.epochs, self.mini_batch_size))
         self.ann.train_set(self.input_samples, self.output_samples,
                            self.learning_rate, self.regularization,
                            self.epochs, self.mini_batch_size)

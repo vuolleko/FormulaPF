@@ -66,7 +66,7 @@ while not done:
 
     # update game status and handle game logic
     car_list.update(track, frame_counter)
-    # particles.update(frame_counter)
+    particles.update(frame_counter)
     bayes.update(frame_counter)
     status_bar.update(frame_counter)
 
@@ -78,7 +78,7 @@ while not done:
             car.driver.draw_viewfield(screen)
 
     # draw particles
-    # particles.draw(screen)
+    particles.draw(screen)
     bayes.draw(screen)
 
     # update screen
