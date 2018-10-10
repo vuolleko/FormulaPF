@@ -5,12 +5,12 @@ import constants
 from particle_filter import PFilter
 
 
-class Bayes(PFilter):
+class BO(PFilter):
     """
     Implements Bayesian optimization for positioning the car on track.
     """
     def __init__(self, track, car, n_initial=30, theta=100.):
-        super(Bayes, self).__init__(track, car, n_particles=n_initial)
+        super(BO, self).__init__(track, car, n_particles=n_initial)
         self.theta_inv = 1. / theta
 
         # evaluate similarities for the initial sample
@@ -81,7 +81,7 @@ class Bayes(PFilter):
         """
         Draw the particle with the highest posterior probability.
         """
-        # super(Bayes, self).draw(screen)
+        # super(BO, self).draw(screen)
         ii_best = np.argmax(self.mus)
         pygame.draw.circle(screen, constants.BLUE, (self.x_prop[ii_best], self.y_prop[ii_best]), 5)
 
