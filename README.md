@@ -5,5 +5,6 @@ Statistical algorithms for positioning a car on track in [FormulaAI](../../../Fo
 Currently included algorithms:
 * A particle filter (sequential Monte Carlo)
 * Bayesian optimization
+* Kalman filter
 
 Needs [PyGame](http://www.pygame.org)
