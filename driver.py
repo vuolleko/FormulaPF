@@ -132,7 +132,7 @@ class AI_TIF(Driver):
         elif self.view_field[-1,0] and not self.view_field[0,0]:
             car.turn_right = True
 
-        if self.view_field[self.view_resolution[0]/2, -1]:
+        if self.view_field[self.view_resolution[0]//2, -1]:
             car.brake = car.speed > self.allowed_speed
 
             # special handling of tight corners
